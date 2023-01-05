@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" /> <meta name="author" content="example" />
+<meta name="description" content="کافه پلانکتون نمایشگاه بین‌المللی ارومیه">
+<link rel="icon" type="image/png" href="images/favicon.png">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>فرم ثبت نام</title>
+
+<link href="{% static 'css/plugins.css' %}" rel="stylesheet">
+<link href="{% static 'css/style.css' %}" rel="stylesheet">
+<link href="{% static 'css/rtl.css' %}" rel="stylesheet">
+</head>
+<body>
+
+    <div class="body-inner">
+
+        <section class="fullscreen" style="background-image: url({% static 'images/3-6.jpg' %})">
+            <div class="container container-fullscreen">
+                <div class="text-middle">
+                    <div class="text-center m-b-30">
+                        <a href="َ" class="logo">
+                            <img src="{% static 'images/uif.jpg' %}" style="width:100px" alt="UIF Logo">
+                        </a>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 center p-40 background-white b-r-6">
+                            <form class="form-transparent-grey" method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h3>ثبت نام حساب کاربری جدید</h3>
+                                    <p>با وارد کردن اطلاعات زیر یک حساب کاربری ایجاد کنید. </p>
+                                    {% if form.errors %}
+                                        {% for field in form %}
+                                            {% for error in field.errors %}
+                                                <p class="text-danger"> {{ error }} </p>
+                                            {% endfor %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    
+                                </div>
+                                <div class="col-lg-12 form-group">
+                                    <label>نام کاربری دلخواه</label>
+                                    <input type="text" name="username" class="form-control" required>
+                                </div>
+                                <div class="col-lg-6 form-group">
+                                    <label>نام</label>
+                                    <input type="text" name="first_name" class="form-control" required>
+                                </div>
+                                <div class="col-lg-6 form-group">
+                                    <label>نام خانوادگی</label>
+                                    <input type="text" name="last_name" class="form-control" required>
+                                </div>
+                                <div class="col-lg-6 form-group">
+                                    <label>رمز عبور</label>
+                                    <input type="password"  name="password1" class="form-control" required>
+                                </div>
+                                <div class="col-lg-6 form-group">
+                                    <label>تکرار رمز عبور</label>
+                                    <input type="password"  name="password2" class="form-control" required>
+                                </div>
+                                <div class="col-lg-12 form-group">
+                                    <p>رمز عبور باید حداقل 8 کاراکتر و شامل حروف بزرگ،کوچک و عدد باشد.</p>
+                                </div>
+                                <div class="col-lg-8 form-group">
+                                    <button class="btn" type="submit">ثبت نام حساب جدید </button>
+                                    <a href=""><button type="button" class="btn btn-danger m-l-10">لغو</button></a>
+                                </div>
+                                <div class="col-lg-4 form-group">
+                                    <p>حساب کاربری دارم - <a href="{% url 'login' %}">ورود</a></p>
+                                </div>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+
+<a id="scrollTop"><i class="icon-chevron-up"></i><i class="icon-chevron-up"></i></a>
+
+<script src="{% static 'js/jquery.js' %}"></script>
+<script src="{% static 'js/plugins.js' %}"></script>
+
+<script src="{% static 'js/functions.js' %}"></script>
+</body>
+</html>
