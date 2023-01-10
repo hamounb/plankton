@@ -1,10 +1,10 @@
-{% comment %} {% extends "base.html" %}
+{% extends "base.html" %}
 
 {% block title %}
 فعال‌سازی با موفقیت انجام شد!
 {% endblock title %}
 
-{% block content %} {% endcomment %}
+{% block content %}
 <section class="m-t-80 p-b-150">
     <div class="container">
         <div class="row">
@@ -14,7 +14,7 @@
             <div class="col-lg-6">
                 <div class="text-left">
                     <h1 class="text-medium">حساب کاربری شما با موفقیت فعال شد</h1>
-                    <p class="lead">صفحه‌ای که شما بدنبال آن هستید دارای مجوزهای محدود می‌باشد. اگر نیاز به داشتن مجوز دارید لطفا با <a href=">پشتیبانی </a>تماس بگیرید.</p>
+                    <a class="btn btn-success" href="{% url 'account:profile' %}">نمایش حساب</a>
                     <div class="seperator m-t-20 m-b-20"></div>
                     <div class="search-form">
                         <p>بازگشت به</p>
@@ -32,4 +32,4 @@
         </div>
     </div>
 </section>
-{% comment %} {% endblock content %} {% endcomment %}
+{% endblock content %} 

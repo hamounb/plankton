@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% block title %}
+سبد خرید
+{% endblock title %}
+{% block content %}
+        <section id="page-title" style="background-color:#76A1A7">
+            <div class="container">
+                <div class="page-title">
+                    <h1>سبد خرید</h1>
+                    <span>جزئیات سفارش</span>
+                </div>
+                <div class="breadcrumb">
+                    
+                </div>
+            </div>
+        </section>
+                            
+                            <div class="modal fade" id="modal" tabindex="-1" role="modal" aria-labelledby="modal-label" aria-hidden="true"
+                                style="display: none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="modal-label">کاربر گرامی</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                {% if user.is_authenticated %}
+                                                    <p style="color:black">دقت فرمایید که اطلاعات حساب کاربری خود را تکمیل بفرمایید
+                                                    ،چون در صورت عدم تکمیل اطلاعات حساب سفارش شما پردازش نخواهد شد.
+                                                    </p>
+                                                {% else %}
+                                                    <p style="color:black">جهت ثبت نهایی سفارش خود باید حساب کاربری ایجاد کنید و یا 
+                                                    اگر قبلا ثبت نام کرده‌اید وارد حساب خود شوید.
+                                                    دقت فرمایید که اطلاعات حساب کاربری خود را تکمیل بفرمایید
+                                                    ،چون در صورت عدم تکمیل اطلاعات حساب سفارش شما پردازش نخواهد شد.</p>
+                                                {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal">قبول ندارم، لغو</button>
+                                            <a class="btn btn-b" href="{% url 'shop:checking' %}">قبول دارم، ادامه خرید</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+        <section id="shop-cart">
+            <div class="container">
+                <div class="shop-cart">
+                    <div class="table table-sm table-striped table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="cart-product-remove"></th>
+                                    <th class="cart-product-thumbnail">محصول</th>
+                                    <th class="cart-product-price">قیمت واحد</th>
+                                    <th class="cart-product-quantity">تعداد</th>
+                                    <th class="cart-product-subtotal">جمع کل</th>
+                                    <th class="cart-product-update">اضافه کن</th>
+                                    <th class="cart-product-update">کم کن</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for k,v in cart.items %}
+                                <tr>
+                                    <td class="cart-product-remove">
+                                        <a href="{% url "shop:cartremove" pid=v.product.id %}"><i class="fa fa-times"></i></a>
+                                    </td>
+                                    <td class="cart-product-thumbnail">
+                                        <a href="{% url "shop:productdetails" pid=v.product.id %}">
+                                        {% if v.product.cover %}
+                                            <img src="{{ v.product.cover.url }}" alt="Bolt Sweatshirt">
+                                        {% endif %}
+                                        </a>
+                                        <div class="cart-product-thumbnail-name">{{ v.product.name }}</div>
+                                    </td>
+                                    
+                                    <td class="cart-product-price">
+                                        <span class="amount">{{ v.product.price }} تومان</span>
+                                    </td>
+                                    <td class="cart-product-quantity">
+                                        <div class="quantity">
+                                            <span class="amount">{{ v.count }}</span>
+                                        </div>
+                                        
+                                    </td>
+                                    <td class="cart-product-subtotal">
+                                        <span class="amount">{% widthratio v.product.price 1 v.count %}  تومان</span>
+                                    </td>
+                                    <td class="cart-product-price">
+                                        <a class="btn" href="{% url "shop:cartadd" pid=v.product.id %}">+</a>
+                                    </td>
+                                    <td class="">
+                                        <a class="btn" href="{% url "shop:cartpopup" pid=v.product.id %}">-</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            {% comment %} <form class="form-inline">
+                                <div class="input-group">
+                                    <input type="text" placeholder="کد تخفیف" id="CouponCode" class="form-control">
+                                    <div class="input-group-append">
+                                        <button type="submit" id="widget-subscribe-submit-button"
+                                            class="btn">اعمال</button>
+                                    </div>
+                                </div>
+                                <p class="small">هر کد تخفیف یا کد تبلیغاتی معتبری را در اینجا وارد کنید تا از تخفیف خود
+                                    استفاده کنید.</p>
+                            </form> {% endcomment %}
+                        </div>
+                        <div class="col-lg-8 text-right">
+                            {% comment %} <button type="button" class="btn">به روز رسانی سبد خرید</button> {% endcomment %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <hr class="space">
+                        <div class="col-lg-6">
+                            {% comment %} <h4>محاسبه حمل و نقل</h4>
+                            <form class="row">
+                                <div class="col-lg-12 m-b-20">
+                                    <select>
+                                    </select>
+                                </div>
+                                <div class="col-lg-6 form-group">
+                                    <input type="text" placeholder="شماره سالن" class="form-control">
+                                </div>
+                                <div class="col-lg-6  form-group">
+                                    <input type="text" class="form-control" placeholder="نام غرفه">
+                                </div>
+                            </form> {% endcomment %}
+                        </div>
+                        <div class="col-lg-6 p-r-10 ">
+                            <div class="table-responsive">
+                                <h4>جمع سبد خرید</h4>
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="cart-product-name">
+                                                <strong>جمع سبد خرید</strong>
+                                            </td>
+                                            <td class="cart-product-name text-right">
+                                                <span class="amount">{{ total }} تومان</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="cart-product-name">
+                                                <strong>ارسال</strong>
+                                            </td>
+                                            <td class="cart-product-name  text-right">
+                                                <span class="amount">ارسال رایگان</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="cart-product-name">
+                                                <strong>جمع کل</strong>
+                                            </td>
+                                            <td class="cart-product-name text-right">
+                                                <span class="amount color lead"><strong>{{ total }} تومان</strong></span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <a href="#" class="btn icon-left float-right" data-target="#modal" data-toggle="modal"><span>تکمیل سبد خرید</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="background-grey p-t-40 p-b-0">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="icon-box effect small clean">
+                            <div class="icon">
+                                <a href="#"><i class="fa fa-gift"></i></a>
+                            </div>
+                            <h3>ارسال رایگان </h3>
+                            <p>سفارشات آنلاین بصورت کاملا رایگان در محل غرفه شما سرو خواهد شد.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="icon-box effect small clean">
+                            <div class="icon">
+                                <a href="#"><i class="fa fa-history"></i></a>
+                            </div>
+                            <h3>تحویل در محل غرفه شما</h3>
+                            <p>فقط کافی است سفارش خود را ثبت کنید و منتظر تحویل آن در محل غرفه خود باشید.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="icon-box effect small clean">
+                            <div class="icon">
+                                <a href="#"><i class="fa fa-credit-card"></i></a>
+                            </div>
+                            <h3>پرداخت آنلاین</h3>
+                            <p>شما می‌توانید با تمام کارت‌های بانکی عضو شتاب،سفارش خود را بصورت آنلاین پرداخت نمایید.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock content %}

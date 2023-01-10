@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+{% load jalali_tags %}
+{% block title %}
+سفارش شماره: {{ invoice.id }}
+{% endblock title %}
+
+{% block content %}
+<style>
+    @media print {
+        .dontPrint{
+            display:none;
+        }
+    }
+
+</style>
+<section id="page-content">
+            <div class="container">
+                <div class="row">
+                    <div class="content col-lg-12">
+                        <div class="row">
+                            {% comment %} <div class="col-lg-4">
+                            <h4>نوشیدنی‌های گرم</h4>
+                            {% for products in products %}
+                                {% if products.category.name == "نوشیدنی‌های گرم" %}
+                                <a href="{% url "shop:order_item_add" oid=invoice.id pid=products.id %}"><button type="button" class="btn btn-outline">{{ products.name }}</button></a>
+                                {% endif %}
+                            {% endfor %} 
+                            </div> 
+                            <div class="col-lg-4">
+                            <h4>نوشیدنی‌های سرد</h4>
+                            {% for products in products %}
+                                {% if products.category.name == "نوشیدنی‌های سرد" %}
+                                <a href="{% url "shop:order_item_add" oid=invoice.id pid=products.id %}"><button type="button" class="btn btn-outline">{{ products.name }}</button></a>
+                                {% endif %}
+                            {% endfor %}
+                            </div>
+                            <div class="col-lg-4">
+                                <h4>کیک و دسر</h4>
+                            {% for products in products %}
+                                {% if products.category.name == "نوشیدنی‌های سرد" %}
+                                <a href="{% url "shop:order_item_add" oid=invoice.id pid=products.id %}"><button type="button" class="btn btn-outline">{{ products.name }}</button></a>
+                                {% endif %}
+                            {% endfor %}
+                            </div> {% endcomment %}
+                            {% for category in category %}
+                            <div class="col-lg-4">
+                                <h4>{{ category.name }}</h4>
+                                {% for products in category.productmodel_set.all %}
+                                    <a href="{% url "shop:order_item_add" oid=invoice.id pid=products.id %}"><button type="button" class="btn btn-outline">{{ products.name }}</button></a>
+                        
+                                {% endfor %}
+                            
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+</section>
+<section id="page-content" class="no-sidebar">
+            <div class="container">
+                <div class="row mb-5">
+                    <div class="col-6 .col-md-4">
+                        <h5>شماره فاکتور: {{ invoice.id }}</h5>
+                    </div>
+                    <div class="col-6 .col-md-4" style="text-align:left">
+                        <h5>تاریخ: {{ invoice.created_date|to_jalali:'%H:%M:%S _ %y/%m/%d' }}</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table id="datatable" class="table table-bordered table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th colspan="5" style="text-align:center; font-size:14pt;"><strong>کافه پلانکتون نمایشگاه</strong></th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th><strong>نام محصول</strong></th>
+                                    <th>قیمت واحد</th>
+                                    <th>تعداد سفارش</th>
+                                    <th>جمع کل</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for items in items %}
+                                <tr>
+                                    <th><a href="{% url "shop:order_item_delete" oid=invoice.id pid=items.id %}"><span>X</span></a></th>
+                                    <th><h4>{{ items.name }}</h4></th>
+                                    <th><h4>{{ items.price }}</h4></th>
+                                    <th>  <h4>{{ items.count }}   <a class="dontPrint" href="{% url "shop:order_item_remove" oid=invoice.id pid=items.id %}"><button type="button" class="btn btn-xs">کم کن</button></a></h4></th>
+                                    <th><h4>{% widthratio items.price 1 items.count %}</h4></th>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="4"></th>
+                                    <th><h4>{{ invoice.total }}</h4></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <p>قیمت‌ها به ریال می‌باشند.</p>
+                    </div>
+                </div>
+                {% if message %}
+                <button class="btn btn-info"  onclick="printdiv()" target="_blank" >پرینت </button>
+                {% endif %}
+            </div>
+            <div class="container"  id="print_this" style="display:none">
+                <div class="row mb-5">
+                    <div class="col-6 .col-md-4">
+                        <h5>شماره فاکتور: {{ invoice.id }}</h5>
+                    </div>
+                    <div class="col-6 .col-md-4" style="text-align:left">
+                        <h5>تاریخ: {{ invoice.created_date|to_jalali:'%H:%M:%S _ %y/%m/%d' }}</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table id="datatable" class="table table-bordered table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th colspan="5" style="text-align:center; font-size:14pt;"><strong>کافه پلانکتون نمایشگاه</strong></th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th><strong>نام محصول</strong></th>
+                                    <th>قیمت واحد</th>
+                                    <th>تعداد سفارش</th>
+                                    <th>جمع کل</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for items in items %}
+                                <tr>
+                                    <th>{{ forloop.counter }}</th>
+                                    <th><h4>{{ items.name }}</h4></th>
+                                    <th><h4>{{ items.price }}</h4></th>
+                                    <th><h4>{{ items.count }}</h4></th>
+                                    <th><h4>{% widthratio items.price 1 items.count %}</h4></th>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="4"></th>
+                                    <th><h4>{{ invoice.total }}</h4></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <p>قیمت‌ها به ریال می‌باشند.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="page-content">
+            <div class="container">
+                <div class="row">
+                    <div class="content col-lg-9">
+                        <div class="card">
+                            <div class="card-body">
+                                <form method="post">
+                                {% csrf_token %}
+                                    <div class="form-group row">
+                                        <label for="id_pay_id" class="col-form-label col-sm-2 text-sm-right">شماره پیگیری</label>
+                                        <div class="col-sm-10">
+                                        {% if message %}
+                                            <input type="text" name="pay_id" value="{% if invoice.pay_id %} {{ invoice.pay_id }} {% else %} شماره پیگیری وارد نشده! {% endif %}" id="id_pay_id" class="form-control" disabled>
+                                        {% else %}
+                                            <input type="text" name="pay_id" id="id_pay_id" class="form-control">
+                                        {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="id_state" class="col-form-label col-sm-2 text-sm-right">وضعیت پرداخت</label>
+                                        <div class="col-sm-10">
+
+                                            <select name="state" id="id_state">
+                                                <option value="none" selected disabled hidden>{{ invoice.get_state_display }}</option>
+                                                <option value="pending">در انتظار پرداخت</option>
+                                                <option value="done">پرداخت شده</option>
+                                            </select>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="id_table" class="col-form-label col-sm-2 text-sm-right">شماره میز</label>
+                                        <div class="col-sm-10">
+
+                                            <select name="table" id="id_table">
+                                                <option value="none" selected disabled hidden>{{ invoice.get_table_display }}</option>
+                                                <option value="one">یک</option>
+
+                                                <option value="two">دو</option>
+
+                                                <option value="three">سه</option>
+
+                                                <option value="four">چهار</option>
+
+                                                <option value="five">پنج</option>
+
+                                                <option value="six">شش</option>
+
+                                                <option value="seven">هفت</option>
+
+                                                <option value="eight">هشت</option>
+
+                                                <option value="nine">نه</option>
+
+                                                <option value="out">بیرون بر</option>
+                                            </select>
+                                            
+                                        </div>
+                                    </div>
+                                    {% if form.errors %}
+                                    <div class="form-group row">
+                                        {{ form.errors }}
+                                    </div>
+                                    {% endif %}
+                                    <div class="form-group row">
+                                        <div class="col-sm-10 ml-sm-auto">
+                                        </div>
+                                        <div class="col-sm-2 ml-sm-auto">
+                                        {% if message %}
+                                            
+                                        {% else %}
+                                            <button type="submit" class="btn btn-primary">ثبت سفارش</button>
+                                        {% endif %}
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+<script>
+    function printdiv()
+    {
+        var printContents = document.getElementById('print_this').innerHTML;
+        var originalContents = document.body.innerHTML;
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+    }
+</script> 
+
+        
+    
+
+{% endblock content %}

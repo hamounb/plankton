@@ -51,7 +51,7 @@ class ProfileModel(BaseModel):
     booth_number = models.CharField(verbose_name='شماره غرفه', max_length=3, null=True, blank=True)
     code = models.CharField(verbose_name='کد ملی', null=True, blank=True, max_length=10)
 
-    def __self__(self):
+    def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.mobile.mobile}"
 
     class Meta:

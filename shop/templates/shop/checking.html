@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}
+عدم تکمیل حساب کاربری
+{% endblock title %}
+{% block content %}
+        <section id="page-content">
+            <div class="container">
+                <div class="row">
+                    <div class="content col-lg-12">
+                            <div class="col-lg-6">
+                                <div role="alert" class="alert alert-warning">
+                                    <h4>عدم تکمیل حساب کاربری</h4>
+                                    لطفا اطلاعات کاربری حساب خود را تکمیل نمایید. <br>
+                                    نام،نام خانوادگی،شماره سالن،شماره غرفه و نام غرفه الزامی است. <br>
+                                    در صورت عدم تکمیل اطلاعات حساب کاربری قادر به ثبت سفارش نخواهید بود. 
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <a href="{% url 'account:profile' %}"><button class="btn btn-block">برو به حساب کاربری</button></a>
+                            </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+{% endblock content %}

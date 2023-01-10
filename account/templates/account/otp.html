@@ -24,7 +24,7 @@
             <div class="container">
                 <div>
                     <div class="text-center m-b-30">
-                        <a href="index.html" class="logo">
+                        <a href="{% url 'shop:index' %}" class="logo">
                             <img src="{% static 'images/uif.jpg' %}" style="width:150px" alt="UIF Logo">
                         </a>
                     </div>
@@ -38,6 +38,11 @@
                                     {% for error in form.non_field_errors %}
                                         <p class="text-danger">{{ error }}</p>
                                     {% endfor %}
+                                {% endif %}
+                                {% if messages %}
+                                        {% for message in messages %}
+                                        <p {% if message.tags %} class="text-danger"{% endif %}>{{ message }}</p>
+                                        {% endfor %}
                                 {% endif %}
                                     <label class="sr-only">شماره موبایل</label>
                                     <input type="text" name="mobile" maxlength="11" required id="id_mobile" class="form-control" placeholder="موبایل">

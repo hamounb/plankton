@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load jalali_tags %}
+{% block title %}
+پیش فاکتور | شماره: {{ invoice.id }}
+{% endblock title %}
+{% block content %}
+
+<section id="page-content" class="no-sidebar">
+            <div class="container">
+
+                <div class="row mb-5">
+                    <div class="col-lg-6">
+                        <h4>پیش فاکتور سفارش شما</h4>
+                    </div>
+                    <div class="col-lg-6 text-right">
+                        <a href="{% url 'shop:cartdetails' %}"><button type="button" class="btn btn-light"><i class="icon-corner-up-left"></i> بازگشت</button></a>
+                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table id="datatable" class="table table-bordered table-hover" style="width:100%;border:2px solid black">
+                            <thead style="border:2px solid black;">
+                                <tr>
+                                    <th colspan="5" style="text-align:center;border:2px solid black;">کافه پلانکتون (شرکت نمایشگاه بین‌المللی ارومیه)</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="3" style="text-align:center;border:2px solid black;">شماره فاکتور: {{ invoice.id }}</th>
+                                    <th colspan="2" style="text-align:center;border:2px solid black;">تاریخ: {{ invoice.created_date|to_jalali:'%y/%m/%d' }}</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align:center;">
+                                    <td>ردیف</td>
+                                    <td>نام محصول</td>
+                                    <td>قیمت واحد</td>
+                                    <td>تعداد</td>
+                                    <td>جمع کل</td>
+                                </tr>
+                                {% for item in item %}
+                                <tr style="text-align:center">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.price }}</td>
+                                    <td>{{ item.count }}</td>
+                                    <td>{% widthratio item.price 1 item.count %}</td>
+                                </tr>
+                                
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    
+                                    <th colspan="5" style="text-align:left"><h4>مبلغ کل پرداختی : {{ invoice.total }} تومان</h4></th>
+                                </tr>
+                            </tfoot>
+                            
+                        </table>
+                    </div>
+                    <div class="col-lg-9"></div>
+                    <div class="col-lg-3">
+                                <a class="btn btn-block btn-lg" href="{% url 'shop:pay' invoice_id=invoice.id %}">پرداخت</a>
+                            </div>
+                </div>
+
+            </div>
+        </section>
+        
+
+
+{% endblock content %}

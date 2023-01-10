@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load static%}
+{% load jalali_tags %}
+
+{% block title %}
+به حساب کاربری خودتان خوش آمدید
+{% endblock title %}
+
+{% block content %}
+        <section id="page-content" class="sidebar-right" style="background-color:; padding-top:5%;">
+            <div class="container">
+                <div class="row">
+                    <div class="sidebar col-lg-2">
+                        <ul class="nav nav-pills flex-column" style="max-width: 300px;">
+                            <li class="nav-item"><a class="nav-link active" href="#"><i class="icon-grid"></i> پیشخوان</a></li>
+                        </ul>
+                        <div class="widget clearfix widget-archive">
+                            <h5 class="widget-title"></h5>
+                        </div>
+                    </div>
+                    <div class="content col-lg-10" style="background-color:; padding-right:20px;">
+                    {% for invoice in order %}
+                        <div class="row mb-5">
+                            <div class="col-6 .col-md-4">
+                                <h5>شماره فاکتور: {{ invoice.id }}</h5>
+                            </div>
+                            <div class="col-6 .col-md-4" style="text-align:left">
+                                <h5>تاریخ: {{ invoice.created_date|to_jalali:'%H:%M:%S _ %y/%m/%d' }}</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <table id="datatable" class="table table-bordered table-hover" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="5" style="text-align:center; font-size:14pt;"><strong>کافه پلانکتون نمایشگاه</strong></th>
+                                        </tr>
+                                        <tr>
+                                            <th></th>
+                                            <th><strong>نام محصول</strong></th>
+                                            <th>قیمت واحد</th>
+                                            <th>تعداد سفارش</th>
+                                            <th>جمع کل</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for items in invoice.invoiceitemmodel_set.all %}
+                                        <tr>
+                                            <th>{{ forloop.counter }}</th>
+                                            <th><h4>{{ items.name }}</h4></th>
+                                            <th><h4>{{ items.price }}</h4></th>
+                                            <th>  <h4>{{ items.count }}</h4></th>
+                                            <th><h4>{% widthratio items.price 1 items.count %}</h4></th>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="4"></th>
+                                            <th><h4>{{ invoice.total }}</h4></th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <p>قیمت‌ها به ریال می‌باشند.</p>
+                                {% if invoice.state == "done" %}
+                                <p class="text-success">پرداخت شده</p>
+                                {% else %}
+                                <p class="text-danger">فاکتور هنوز پرداخت نشده</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% if invoice.state == "done" %}
+                        <button class="btn btn-success"  onclick="printdiv()" target="_blank" >چاپ فاکتور</button>
+                        {% else %}
+                        <a href="{% url 'shop:pay' invoice_id=invoice.id %}" class="btn btn-danger">پرداخت فاکتور</a>
+                        <a href="{% url 'shop:invoice-delete' idid=invoice.id %}" class="btn btn-warning">حذف فاکتور</a>
+                        {% endif %}
+                        <div class="line"></div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+{% endblock content %}

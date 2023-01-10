@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load jalali_tags %}
+
+{% block title %}
+لیست سفارش‌ها
+{% endblock title %}
+
+{% block content %}
+<section id="page-content">
+            <div class="container">
+                <div class="row">
+                    <div class="content col-lg-12">
+                        <a class="btn btn-lg btn-success" href="{% url 'shop:order_create' %}" target="_blank"><i class="fa fa-cog"></i> سفارش جدید</a>
+                        <a class="btn btn-lg" href="{% url 'shop:online' %}" target="_blank"><i class="fa fa-list"></i> سفارشات آنلاین</a>
+                    </div>
+                </div>
+            </div>
+</section>
+<section id="page-content" class="no-sidebar">
+            <div class="container">
+
+                <div class="row mb-5">
+                    <div class="col-lg-6">
+                        <h4>لیست سفارش‌ها</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table id="datatable" class="table table-bordered table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>شماره فاکتور</th>
+                                    <th>شماره میز</th>
+                                    <th>مبلغ کل</th>
+                                    <th>تاریخ</th>
+                                    <th>وضعیت پرداخت</th>
+                                    <th>شماره پیگیری</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for invoice in invoice %}
+                                <tr>
+                                    <th>{{ invoice.id }}</th>
+                                    <th>{{ invoice.get_table_display }}</th>
+                                    <th>{{ invoice.total }}</th>
+                                    <th>{{ invoice.created_date|to_jalali:'%y/%m/%d _ %H:%M:%S' }}</th>
+                                    <th>{{ invoice.get_state_display }}</th>
+                                    <th>{{ invoice.pay_id }}</th>
+                                    <th>
+                                        {% if invoice.state == "done" %}
+                                        <a href="{% url 'shop:order' oid=invoice.id %}"><button type="button" class="btn btn-success btn-sm">جزئیات</button></a>
+                                        {% else %}
+                                        <a href="{% url 'shop:order' oid=invoice.id %}"><button type="button" class="btn btn-warning btn-sm">ویرایش</button></a>
+                                        {% endif %}
+                                        </th>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+
+{% endblock content %}

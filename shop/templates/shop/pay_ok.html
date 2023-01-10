@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}
+پرداخت موفق
+{% endblock title %}
+
+{% block content %}
+<section id="page-title">
+            <div class="container">
+                <div class="page-title">
+                    <h1> وضعیت پرداخت</h1>
+                    <span></span>
+                </div>
+                <div class="breadcrumb">
+                    
+                </div>
+            </div>
+        </section>
+
+
+        <section id="shop-checkout-completed">
+            <div class="container">
+                <div class="p-t-10 m-b-20 text-center">
+                    <div class="text-center">
+                        <h3 style="color:green">تبریک می گویم! سفارش شما تکمیل شد!</h3>
+                        <h4>کد پیگیری: {{ payment.ref_id }} - شماره فاکتور: {{ payment.invoice.id }}</h4>
+                        <p>لطفا منتظر باشید تا دقایقی دیگر سفارش شما آماده تحویل می‌شود.</p>
+                    </div>
+                    <a href="#" class="btn btn-success icon-left m-r-10"><span>پشتیبانی</span></a><a class="btn btn-success icon-left"
+                        href="{% url 'shop:products' %}"><span>بازگشت به فروشگاه</span></a>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="background-grey p-t-40 p-b-0">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="icon-box effect small clean">
+                            <div class="icon">
+                                <a href="#"><i class="fa fa-gift"></i></a>
+                            </div>
+                            <h3>ارسال رایگان </h3>
+                            <p>سفارشات آنلاین بصورت کاملا رایگان در محل غرفه شما سرو خواهد شد.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="icon-box effect small clean">
+                            <div class="icon">
+                                <a href="#"><i class="fa fa-history"></i></a>
+                            </div>
+                            <h3>تحویل در محل غرفه شما</h3>
+                            <p>فقط کافی است سفارش خود را ثبت کنید و منتظر تحویل آن در محل غرفه خود باشید.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="icon-box effect small clean">
+                            <div class="icon">
+                                <a href="#"><i class="fa fa-credit-card"></i></a>
+                            </div>
+                            <h3>پرداخت آنلاین</h3>
+                            <p>شما می‌توانید با تمام کارت‌های بانکی عضو شتاب،سفارش خود را بصورت آنلاین پرداخت نمایید.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock content %}

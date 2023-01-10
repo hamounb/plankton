@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load jalali_tags %}
+
+{% block title %}
+لیست سفارش‌های آنلاین
+{% endblock title %}
+
+{% block content %}
+<section id="page-content">
+            <div class="container">
+                <div class="row">
+                    <div class="content col-lg-12">
+                        <a class="btn btn-lg" href="{% url 'shop:online' %}" target="_blank"><i class="fa fa-cog"></i> سفارشات آنلاین</a>
+                    </div>
+                </div>
+            </div>
+</section>
+<section id="page-content" class="no-sidebar">
+            <div class="container">
+
+                <div class="row mb-5">
+                    <div class="col-lg-6">
+                        <h4> شماره فاکتور {{ invoice.id }}</h4>
+                    </div>
+                    <div class="col-lg-6" style="text-align:left">
+                        <h4><a href="{% url 'shop:online' %}">بازگشت</a></h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table id="datatable" class="table table-bordered table-hover" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>نام محصول</th>
+                                    <th>تعداد</th>
+                                    <th>قیمت واحد(تومان)</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in item %}
+                                <tr>
+                                    <th>{{ forloop.counter }}</th>
+                                    <th>{{ item.name }}</th>
+                                    <th>{{ item.count }}</th>
+                                    <th>{{ item.price }}</th>
+                                    
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <h5>نام مشتری: {{ customer.firstname }} {{ customer.lastname }}</h5>
+                        <h5> شماره مشتری: {{ customer.phone }} - آدرس: سالن شماره {{ customer.address }} شماره غرفه {{customer.booth_number }} نام غرفه {{customer.booth_name }}</h5>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+{% endblock content%}

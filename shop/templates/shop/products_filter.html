@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}
+منوی {{ category.name }}
+{% endblock title %}
+{% block content %}
+
+
+<section>
+            <div class="container">
+                <div class="row m-b-20">
+                    <div class="col-lg-2">
+                        <div class="order-select">
+                            <h6><a href="{% url 'shop:products' %}">همه</a></h6>
+                        </div>
+                    </div>
+                    {% for category in category %}
+                    <div class="col-lg-2">
+                        <div class="order-select">
+                            <h6><a href="{% url 'shop:products_filter' cid=category.id %}">{{ category.name }}</a></h6>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                <hr>
+                <div class="shop">
+                    <div class="grid-layout grid-4-columns" data-item="grid-item">
+                    {% for products in products %}
+                        <div class="grid-item">
+                            <div class="product">
+                                <div class="product-image">
+                                    <a href="{% url "shop:productdetails" pid=products.id %}">
+                                    {% if product.cover %}
+                                        <img alt="{{ products.name }}" src="{{ products.cover.url }}">
+                                    {% endif %}
+                                    </a>
+                                    {% comment %} <span class="product-new">جدید</span>
+                                    <span class="product-wishlist">
+                                        <a href="#"><i class="fa fa-heart"></i></a>
+                                    </span>
+                                    <div class="product-overlay">
+                                        <a href="shop-product-ajax-page.html" data-lightbox="ajax">مشاهده سریع</a>
+                                    </div> {% endcomment %}
+                                </div>
+                                <div class="product-description">
+                                    <div class="product-category">{{ products.category.name }}</div>
+                                    <div class="product-title">
+                                        <h3><a href="{% url "shop:productdetails" pid=products.id %}">{{ products.name }}</a></h3>
+                                    </div>
+                                    <div class="product-price"><ins>{{products.price }} تومان</ins>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <a class="btn btn-rounded btn-block" href="{% url "shop:cartadd" pid=products.id %}"><i class="icon-shopping-cart"></i> افزودن به سبد خرید</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %} 
+                    </div>
+                    <hr>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <section class="background-grey p-t-40 p-b-0">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="icon-box effect small clean">
+                            <div class="icon">
+                                <a href="#"><i class="fa fa-gift"></i></a>
+                            </div>
+                            <h3>ارسال رایگان </h3>
+                            <p>سفارشات آنلاین بصورت کاملا رایگان در محل غرفه شما سرو خواهد شد.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="icon-box effect small clean">
+                            <div class="icon">
+                                <a href="#"><i class="fa fa-history"></i></a>
+                            </div>
+                            <h3>تحویل در محل غرفه شما</h3>
+                            <p>فقط کافی است سفارش خود را ثبت کنید و منتظر تحویل آن در محل غرفه خود باشید.</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="icon-box effect small clean">
+                            <div class="icon">
+                                <a href="#"><i class="fa fa-credit-card"></i></a>
+                            </div>
+                            <h3>پرداخت آنلاین</h3>
+                            <p>شما می‌توانید با تمام کارت‌های بانکی عضو شتاب،سفارش خود را بصورت آنلاین پرداخت نمایید.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock content %}

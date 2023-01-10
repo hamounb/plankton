@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+به حساب کاربری خودتان خوش آمدید
+{% endblock title %}
+
+{% block content %}
+        <section id="page-content" class="sidebar-right" style="background-color:#e4bc98; padding-top:5%;">
+            <div class="container">
+                <div class="row">
+                    <div class="sidebar col-lg-2">
+                        <ul class="nav nav-pills flex-column" style="max-width: 300px;">
+                            <li class="nav-item"><a class="nav-link" href="{% url 'account:profile' %}"><i class="icon-grid"></i> پیشخوان</a></li>
+                            <li class="nav-item"><a class="nav-link active" href="{% url 'account:profile-edit' pid=profile.id %}"><i class="icon-user"></i> پروفایل</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'account:profile-order' %}"><i class="icon-menu"></i> سفارش‌ها</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}"><i class="icon-log-out"></i> خروج</a></li>
+                        </ul>
+                        <div class="widget clearfix widget-archive">
+                            <h5 class="widget-title"></h5>
+                        </div>
+                    </div>
+                    <div class="content col-lg-10" style="background-color:; padding-right:20px;">
+                        <div class="row">
+                            <div class="content col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <label for="username">نام و نام خانوادگی:</label>
+                                                    <input type="text" class="form-control" value="{{ profile.user.first_name }} {{ profile.user.last_name }}" disabled>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <div class="form-group col-md-6">
+                                                    <label for="username">شماره موبایل:</label>
+                                                    <input type="text" class="form-control" value="{{ profile.mobile.mobile }}" disabled>
+                                                </div>
+                                            </div>
+                                        <form class="form-validate" method="post">
+                                        {% csrf_token %}
+                                        {% if form.non_field_errors %}
+                                            {% for error in form.non_field_errors %}
+                                                <p class="text-danger">{{ error }}</p>
+                                            {% endfor %}
+                                        {% endif %}
+                                        {% if messages %}
+                                        {% for message in messages %}
+                                                <p {% if message.tags %} class="text-danger"{% endif %}>{{ message }}</p>
+                                                {% endfor %}
+                                        {% endif %}
+                                            
+                                        {% for field in form %}
+                                            <div class="form-row">
+                                                    <div class="form-group col-md-6">
+                                                        {{ field.label_tag }}
+                                                        {{ field }}
+                                                    </div>
+                                            </div>
+                                        {% endfor %}
+                                            <button type="submit" class="btn m-t-30 mt-3">ذخیره</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock content %}

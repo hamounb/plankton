@@ -5,6 +5,8 @@ from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django import views
 from .forms import *
+from django.contrib import messages
+from shop.models import InvoiceModel
 import requests
 
 # Create your views here.
@@ -33,15 +35,18 @@ class OtpView(LoginRequiredMixin, views.View):
 
     def post(self, request):
         form = OtpForm(request.POST)
-        user = request.user
+        user = get_object_or_404(User, id=request.user.id)
         if form.is_valid():
             number = form.cleaned_data['mobile']
             try:
                 mobile = MobileModel.objects.get(mobile=number)
+                if mobile.user != user.pk:
+                    messages.error(request, 'این شماره موبایل قبلا در سیستم ثبت شده است!')
+                    return render(request, 'account/otp.html', {'form':form})
             except MobileModel.DoesNotExist:
-                mobile = MobileModel(user=user.id, mobile=number)
+                mobile = MobileModel(user=user, mobile=number)
             if mobile.is_active:
-                return render(request, 'account/otp-success.html')
+                return render(request, 'account/otp-success.html') 
             mobile.generate()
             mobile.save()
             new_line = '\n'
@@ -53,7 +58,7 @@ class OtpView(LoginRequiredMixin, views.View):
         return render(request, 'account/otp.html', {'form':form})
 
 
-class OtpSubmitView(views.View):
+class OtpSubmitView(LoginRequiredMixin ,views.View):
     login_url = 'login'
 
     def get(self, request, number):
@@ -71,7 +76,7 @@ class OtpSubmitView(views.View):
             if mobile.otp == code:
                 mobile.is_active = True
                 mobile.save()
-                profile = ProfileModel(user_pk=request.user.id, mobile_pk=mobile.pk)
+                profile = ProfileModel(user_id=request.user.id, mobile_id=mobile.pk)
                 profile.save()
                 return render(request, 'account/otp-success.html')
             return render(request, 'account/otp-submit.html', {'number':mobile.mobile, 'form':form, 'message':'رمز وارد شده صحیح نمی‌باشد!'})
@@ -83,3 +88,45 @@ class ProfileView(LoginRequiredMixin, views.View):
 
     def get(self, request):
         user = request.user
+        try:
+            profile = ProfileModel.objects.get(user=user.id)
+        except ProfileModel.DoesNotExist:
+            return redirect('account:otp')
+        if profile.mobile.is_active:
+            return render(request, 'account/profile.html', {'profile':profile})
+        return redirect('account:otp')
+
+
+class ProfileEditView(LoginRequiredMixin, views.View):
+    login_url = 'login'
+
+    def get(self, request, pid):
+        profile = get_object_or_404(ProfileModel, pk=pid)
+        form = ProfileEditForm(instance=profile)
+        try:
+            profile = ProfileModel.objects.get(pk=pid)
+        except ProfileModel.DoesNotExist:
+            return redirect('account:otp')
+        if profile.mobile.is_active:
+            return render(request, 'account/profile-edit.html', {'profile':profile, 'form':form})
+        return redirect('account:otp')
+
+    def post(self, request, pid):
+        profile = get_object_or_404(ProfileModel, pk=pid)
+        form = ProfileEditForm(request.POST, instance=profile)
+        if profile.mobile.is_active:
+            if form.is_valid():
+                form.save()
+                return redirect('account:profile')
+            return render(request, 'account/profile-edit.html', {'profile':profile, 'form':form})
+        return redirect('account:otp')
+
+
+class ProfileOrderView(LoginRequiredMixin, views.View):
+    login_url = 'login'
+
+    def get(self, request):
+        user = get_object_or_404(User, id=request.user.id)
+        order = InvoiceModel.objects.filter(user=user).order_by("-created_date")
+        return render(request, 'account/profile-order.html', {'order':order})
+        
