@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load jalali_tags %}
-
+{% load humanize %}
 {% block title %}
 لیست سفارش‌های آنلاین
 {% endblock title %}
@@ -44,14 +44,14 @@
                                     <th>{{ forloop.counter }}</th>
                                     <th>{{ item.name }}</th>
                                     <th>{{ item.count }}</th>
-                                    <th>{{ item.price }}</th>
+                                    <th>{{ item.price|intcomma:False }}</th>
                                     
                                 </tr>
                             {% endfor %}
                             </tbody>
                         </table>
-                        <h5>نام مشتری: {{ customer.firstname }} {{ customer.lastname }}</h5>
-                        <h5> شماره مشتری: {{ customer.phone }} - آدرس: سالن شماره {{ customer.address }} شماره غرفه {{customer.booth_number }} نام غرفه {{customer.booth_name }}</h5>
+                        <h5><strong>نام مشتری: </strong>{{ customer.user.first_name }} {{ customer.user.last_name }}</h5>
+                        <h5><strong> شماره مشتری:</strong> {{ customer.mobile.mobile }} <br><strong> آدرس: </strong>سالن  {{ customer.hall.name }} - غرفه شماره  {{customer.booth_number }} -  {{customer.booth_name }}</h5>
                     </div>
                 </div>
 

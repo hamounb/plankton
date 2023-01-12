@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% load humanize %}
 {% block title %}
 جزئیات محصول | {{ product.name }}
 {% endblock title %}
@@ -25,7 +25,7 @@
                                 <div >
                                     <h3><a href="#">{{ product.name }}</a></h3>
                                 </div>
-                                <div class="product-price"><ins>{{ product.price }} تومان</ins>
+                                <div class="product-price"><ins>{{ product.price|intcomma:False }} تومان</ins>
                                 </div>
                                 
                                 <div class="seperator m-b-10"></div>

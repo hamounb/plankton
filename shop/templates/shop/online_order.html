@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load jalali_tags %}
-
+{% load humanize %}
 {% block title %}
 لیست سفارش‌های آنلاین
 {% endblock title %}
@@ -40,7 +40,7 @@
                             {% for payment in payment %}
                                 <tr>
                                     <th>{{ payment.invoice.id }}</th>
-                                    <th>{{ payment.amount }}</th>
+                                    <th>{{ payment.amount|intcomma:False }}</th>
                                     <th>{{ payment.created_date|to_jalali:'%y/%m/%d _ %H:%M:%S' }}</th>
                                     <th>{{ payment.get_state_display }}</th>
                                     <th>{{ payment.ref_id }}</th>

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static%}
 {% load jalali_tags %}
-
+{% load humanize %}
 {% block title %}
 به حساب کاربری خودتان خوش آمدید
 {% endblock title %}
@@ -48,7 +48,7 @@
                                         <tr>
                                             <th>{{ forloop.counter }}</th>
                                             <th><h4>{{ items.name }}</h4></th>
-                                            <th><h4>{{ items.price }}</h4></th>
+                                            <th><h4>{{ items.price|intcomma:False }}</h4></th>
                                             <th>  <h4>{{ items.count }}</h4></th>
                                             <th><h4>{% widthratio items.price 1 items.count %}</h4></th>
                                         </tr>
@@ -57,13 +57,17 @@
                                     <tfoot>
                                         <tr>
                                             <th colspan="4"></th>
-                                            <th><h4>{{ invoice.total }}</h4></th>
+                                            <th><h4>{{ invoice.total|intcomma:False }}</h4></th>
                                         </tr>
                                     </tfoot>
                                 </table>
                                 <p>قیمت‌ها به ریال می‌باشند.</p>
                                 {% if invoice.state == "done" %}
-                                <p class="text-success">پرداخت شده</p>
+                                <p class="text-success">پرداخت شده -- شماره پیگیری: 
+                                    {% for i in invoice.paymentmodel_set.all %}
+                                    {{ i.ref_id }}
+                                    {% endfor %}
+                                </p>
                                 {% else %}
                                 <p class="text-danger">فاکتور هنوز پرداخت نشده</p>
                                 {% endif %}
@@ -78,8 +82,79 @@
                         <div class="line"></div>
                     {% endfor %}
                     </div>
+                    <div class="content col-lg-10" id="print_this" style="background-color:; padding-right:20px; display:none;">
+                        {% for invoice in order %}
+                        {% if invoice.state == "done" %}
+                        <div id="print_this{{ invoice.id }}">
+                            <div class="row mb-5">
+                                <div class="col-6 .col-md-4">
+                                    <h5>شماره فاکتور: {{ invoice.id }}</h5>
+                                </div>
+                                <div class="col-6 .col-md-4" style="text-align:left">
+                                    <h5>تاریخ: {{ invoice.created_date|to_jalali:'%H:%M:%S _ %y/%m/%d' }}</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <table id="datatable" class="table table-bordered table-hover" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="5" style="text-align:center; font-size:14pt;"><strong>کافه پلانکتون نمایشگاه</strong></th>
+                                            </tr>
+                                            <tr>
+                                                <th></th>
+                                                <th><strong>نام محصول</strong></th>
+                                                <th>قیمت واحد</th>
+                                                <th>تعداد سفارش</th>
+                                                <th>جمع کل</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for items in invoice.invoiceitemmodel_set.all %}
+                                            <tr>
+                                                <th>{{ forloop.counter }}</th>
+                                                <th><h4>{{ items.name }}</h4></th>
+                                                <th><h4>{{ items.price|intcomma:False }}</h4></th>
+                                                <th>  <h4>{{ items.count }}</h4></th>
+                                                <th><h4>{% widthratio items.price 1 items.count %}</h4></th>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th colspan="4"></th>
+                                                <th><h4>{{ invoice.total|intcomma:False }}</h4></th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                    <p>قیمت‌ها به ریال می‌باشند.</p>
+                                    {% if invoice.state == "done" %}
+                                    <p class="text-success">پرداخت شده -- شماره پیگیری: 
+                                        {% for i in invoice.paymentmodel_set.all %}
+                                        {{ i.ref_id }}
+                                        {% endfor %}
+                                    </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="line"></div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        </div>
                 </div>
             </div>
         </section>
-        
+        {% for invoice in order %}
+        <script>
+            function printdiv()
+            {
+                var printContents = document.getElementById('print_this{{ invoice.id }}').innerHTML;
+                var originalContents = document.body.innerHTML;
+                document.body.innerHTML = printContents;
+                window.print();
+                document.body.innerHTML = originalContents;
+            }
+        </script> 
+        {% endfor %}
 {% endblock content %}

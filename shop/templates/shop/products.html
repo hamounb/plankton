@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load humanize %}
 {% block title %}
 لیست منوی کافی شاپ
 {% endblock title %}
@@ -48,7 +48,7 @@
                                     <div class="product-title">
                                         <h3><a href="{% url "shop:productdetails" pid=products.id %}">{{ products.name }}</a></h3>
                                     </div>
-                                    <div class="product-price"><ins>{{products.price }} تومان</ins>
+                                    <div class="product-price"><ins>{{products.price|intcomma:False }} تومان</ins>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-12">

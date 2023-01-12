@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load jalali_tags %}
+{% load humanize %}
 {% block title %}
 پیش فاکتور | شماره: {{ invoice.id }}
 {% endblock title %}
@@ -42,7 +43,7 @@
                                 <tr style="text-align:center">
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ item.name }}</td>
-                                    <td>{{ item.price }}</td>
+                                    <td>{{ item.price|intcomma:False }}</td>
                                     <td>{{ item.count }}</td>
                                     <td>{% widthratio item.price 1 item.count %}</td>
                                 </tr>

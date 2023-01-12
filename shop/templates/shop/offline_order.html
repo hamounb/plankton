@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load jalali_tags %}
-
+{% load humanize %}
 {% block title %}
 لیست سفارش‌ها
 {% endblock title %}
@@ -43,7 +43,7 @@
                                 <tr>
                                     <th>{{ invoice.id }}</th>
                                     <th>{{ invoice.get_table_display }}</th>
-                                    <th>{{ invoice.total }}</th>
+                                    <th>{{ invoice.total|intcomma:False }}</th>
                                     <th>{{ invoice.created_date|to_jalali:'%y/%m/%d _ %H:%M:%S' }}</th>
                                     <th>{{ invoice.get_state_display }}</th>
                                     <th>{{ invoice.pay_id }}</th>
